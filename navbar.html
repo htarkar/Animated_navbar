@@ -1,0 +1,162 @@
+<html>
+<head>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		html {
+			scroll-behavior: smooth;
+		}
+		body {
+			font-family: sans-serif;
+		}
+
+		header {
+			box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.3);
+			position: sticky;
+			top: 0;
+			background: white;
+		}
+		
+		nav {
+			min-height: 10vh;
+			margin: auto;
+			width: 90%;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+
+		nav h1, 
+		nav ul {
+			font-size: 1.5rem;
+			flex: 1;
+		}
+
+		nav ul {
+			list-style: none;
+			display: flex;
+			justify-content: space-between;
+		}
+
+		nav a {
+			color: black;
+			text-decoration: none;
+		}
+
+		section {
+			min-height: 100vh;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		section h2 {
+			font-size: 5rem;
+			color: white;
+		}
+		
+		.home {
+			  background: linear-gradient(to right, #8a2387, #e94057, #f27121); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+		}
+
+		.project {
+			  background: linear-gradient(to right, #8e2de2, #4a00e0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+		}
+
+		.contact {
+		  background: linear-gradient(to right, #f12711, #f5af19); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+		}
+
+		.login {
+			  background: linear-gradient(to right, #aa4b6b, #6b6b83, #3b8d99); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+		}
+
+		.bubble {
+			position: absolute;
+			z-index: -2;
+		    background: linear-gradient(to right, #8a2387, #e94057, #f27121); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+			transform: scale(2);
+			transition: all .3s;
+		}
+	</style>	
+</head>
+<body>
+
+	<header>
+		<nav>
+			<h1>!</h1>
+			<ul>
+				<li><a data-page = "home" href = '#home'>Home</a></li>
+				<li><a data-page = "project" href = '#project'>Project</a></li>
+				<li><a data-page = "contact" href = '#contact'>Contact</a></li>
+				<li><a data-page = "login" href = '#login'>Login</a></li>
+				<div class= "bubble"></div>
+			</ul>
+		</nav>
+	</header>
+
+
+	<main>
+		<section data-index = "0" id = 'home' class = "home">
+			<h2></h2>
+		</section>
+		<section data-index = "1" id = 'project' class = "project">
+			<h2></h2>
+		</section>
+		<section data-index = "2" id = 'contact' class = "contact">
+			<h2></h2>
+		</section>
+		<section data-index = "3" id = 'login' class = "login">
+			<h2></h2>
+		</section>
+	</main>
+
+	<script>
+			const sections = document.querySelectorAll('section');
+			const bubble = document.querySelector('.bubble');
+			const gradients = [
+				" linear-gradient(to right, #8a2387, #e94057, #f27121)",
+				 "linear-gradient(to right, #8e2de2, #4a00e0)",
+				 "linear-gradient(to right, #f12711, #f5af19)",
+				 "linear-gradient(to right, #aa4b6b, #6b6b83, #3b8d99)"
+			];
+			const options = {
+				threshold: 0.7
+			};
+
+			let observer = new IntersectionObserver(navCheck, options);
+
+			function navCheck(entries) {
+				entries.forEach(entry => {
+					const className = entry.target.className;
+					const activeAnchor = document.querySelector(`[data-page = ${className}]`);
+					const gradientIndex = entry.target.getAttribute('data-index');
+					const coords = activeAnchor.getBoundingClientRect();
+					const directions = {
+						height: coords.height,
+						width: coords.width,
+						top: coords.top,
+						left: coords.left
+					};
+
+					if(entry.isIntersecting) {
+						bubble.style.setProperty('left', `${directions.left}px`);
+						bubble.style.setProperty('top', `${directions.top}px`);
+						bubble.style.setProperty('width', `${directions.width}px`);
+						bubble.style.setProperty('height', `${directions.height}px`);
+						bubble.style.background = gradients[gradientIndex];
+					}
+
+				});
+			};
+
+			sections.forEach(section => {
+				observer.observe(section);
+			});
+	</script>
+</body>
+</html>
